@@ -1,0 +1,5 @@
+version: "2"
+
+services:
+  couchbase:
+    image: couchbase:community-3.1.3

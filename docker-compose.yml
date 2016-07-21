@@ -1,0 +1,36 @@
+version: "2"
+
+volumes:
+  cbdata:
+
+services:
+  couchbase1:
+    container_name: couchbase1
+    extends:
+      file: common.yml
+      service: couchbase
+    ports:
+      - "8091-8094:8091-8094"
+  couchbase2:
+    container_name: couchbase2
+    extends:
+      file: common.yml
+      service: couchbase
+  couchbase3:
+    container_name: couchbase3
+    extends:
+      file: common.yml
+      service: couchbase
+
+  intializer:
+    container_name: cbclusterinit
+    depends_on: 
+      - couchbase1
+      - couchbase2
+      - couchbase3
+    environment:
+      COUCHBASE_HOSTS: "couchbase1,couchbase2,couchbase3"
+      COUCHBASE_PORT: 8091
+      COUCHBASE_BUCKET: mybucket
+    build: images/cbclusterinit
+    image: avcbinit:custom
